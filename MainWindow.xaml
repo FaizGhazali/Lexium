@@ -3,10 +3,40 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:syntaxEditor="http://schemas.actiprosoftware.com/winfx/xaml/syntaxeditor"
         xmlns:local="clr-namespace:Lexium"
+        xmlns:Tagger="clr-namespace:Lexium.WordTagger"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <!--#region Left Side-->
+        <Grid Grid.Column="0">
+            <syntaxEditor:SyntaxEditor
+                HorizontalScrollBarVisibility="Auto"
+                VerticalScrollBarVisibility="Auto"
+                IsCurrentLineHighlightingEnabled="True">
+                
 
+                <syntaxEditor:EditorDocument x:Name="document" xml:space="preserve">
+                    <syntaxEditor:EditorDocument.Language>
+                        <Tagger:EditorSetup />
+                    </syntaxEditor:EditorDocument.Language>
+                    
+                </syntaxEditor:EditorDocument>
+
+            </syntaxEditor:SyntaxEditor>
+        </Grid>
+        <!--#endregion-->
+        
+        <!--#region Right Side-->
+        <Grid Grid.Column="1">
+            
+        </Grid>
+        <!--#endregion-->
     </Grid>
 </Window>

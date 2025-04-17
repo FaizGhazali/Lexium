@@ -1,3 +1,3 @@
 # Lexium
- A WPF Actipro Syntac Editor
+ A WPF Actipro Syntax Editor
  

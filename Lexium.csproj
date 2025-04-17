@@ -8,4 +8,17 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="ActiproSoftware.Controls.WPF.SyntaxEditor" Version="24.1.5" />
+    <PackageReference Include="ActiproSoftware.Controls.WPF.SyntaxEditor.Addons.DotNet" Version="24.1.5" />
+    <PackageReference Include="ActiproSoftware.Controls.WPF.SyntaxEditor.Addons.XML" Version="24.1.5" />
+    <PackageReference Include="Lucene.Net" Version="3.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="CustomLanguage\Lexium.langdef">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
