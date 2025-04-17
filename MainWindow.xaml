@@ -17,9 +17,12 @@
         <!--#region Left Side-->
         <Grid Grid.Column="0">
             <syntaxEditor:SyntaxEditor
+                x:Name="syntaxEditor"
                 HorizontalScrollBarVisibility="Auto"
                 VerticalScrollBarVisibility="Auto"
-                IsCurrentLineHighlightingEnabled="True">
+                IsCurrentLineHighlightingEnabled="True"
+                PreviewMouseDown="syntaxEditor_PreviewMouseDown"
+                PreviewMouseUp="SyntaxEditor_PreviewMouseUp">
                 
 
                 <syntaxEditor:EditorDocument x:Name="document" xml:space="preserve">
@@ -35,7 +38,10 @@
         
         <!--#region Right Side-->
         <Grid Grid.Column="1">
-            
+            <StackPanel>
+                <TextBlock x:Name="Text1" Text="test"/>
+                <TextBlock x:Name="Text2" Text="test"/>
+            </StackPanel>
         </Grid>
         <!--#endregion-->
     </Grid>
