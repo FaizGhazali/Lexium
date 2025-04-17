@@ -41,6 +41,19 @@
             <StackPanel>
                 <TextBlock x:Name="Text1" Text="test"/>
                 <TextBlock x:Name="Text2" Text="test"/>
+                <TextBlock x:Name="Text3" Text="test"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0"/>
+                    <Button Grid.Column="1" Content="Define"/>
+                    
+
+                </Grid>
+                <TextBlock x:Name="DefinitionTF" Text="Hello World"/>
             </StackPanel>
         </Grid>
         <!--#endregion-->
