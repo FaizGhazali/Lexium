@@ -69,8 +69,7 @@ namespace Lexium
                 editorView.Selection.SelectRange(offset, 0);
                 Text1.Text = "Mouse Pressed " + wordrange.ToString();
 
-                //var clickedWord = textSnapshot.Text.Substring(wordRange.StartOffset, wordRange.Length);
-                //var clickedWord = textSnapshot.GetText(LineTerminator.CarriageReturnNewline);
+
 
                 var snapshotRange = new TextSnapshotRange(textSnapshot, wordRange);
                 var clickedWord = snapshotRange.Text;
@@ -90,17 +89,8 @@ namespace Lexium
                 var fullText = snapshotRange.Text;
                 var index2 = fullText.IndexOf(matchedPhrase, StringComparison.OrdinalIgnoreCase);
 
-                if (index >= 0)
-                {
-                    // Select the full phrase
-                    editorView.Selection.SelectRange(index, matchedPhrase.Length);
-                    Text3.Text = $"Phrase found and selected: \"{matchedPhrase}\"";
-                    
-                }
-                else
-                {
-                    Text3.Text = $"Phrase \"{matchedPhrase}\" not found in document.";
-                }
+
+
                 if (index <= 0)
                 {
                     // Get length of first word
@@ -109,34 +99,43 @@ namespace Lexium
                     int firstWordLength = firstWord.Length;
 
                     // Set your wordrange
-                    wordrange = new ActiproSoftware.Text.TextRange(firstWordOffset, firstWordOffset+firstWordLength);
+                    wordrange = new ActiproSoftware.Text.TextRange(firstWordOffset, firstWordOffset + firstWordLength);
 
-                    // (Optional) Select the full phrase in editor
-                    //editorView.Selection.SelectRange(index, matchedPhrase.Length);
 
-                    // Text1.Text = $"Phrase found: \"{matchedPhrase}\"faiz hebat | First word: \"{firstWord}\" at {wordrange}";
                     Text1.Text = "Mouse Pressed " + wordrange.ToString();
                 }
-                if(index >= 0)
+                if (index >= 0)
                 {
                     var firstword = matchedPhrase.Split(' ', StringSplitOptions.RemoveEmptyEntries).First();
                     if (clickedWord == firstword)
                     {
+                        if (index >= 0)
+                        {
+                            // Select the full phrase
+                            editorView.Selection.SelectRange(index, matchedPhrase.Length);
+                            Text3.Text = $"Phrase found and selected: \"{matchedPhrase}\"";
+
+                        }
+
                         int firstWordOffset = index;
                         int firstWordLength = firstword.Length;
 
-                        
+
                         wordrange = new ActiproSoftware.Text.TextRange(firstWordOffset, firstWordOffset + firstWordLength);
 
 
                     }
                     else
                     {
-                        int firstWordOffset = index - firstword.Length;
+
+                        int numberofspace = 1;
+                        int firstWordOffset = index - (firstword.Length + numberofspace);
                         int firstWordLength = firstword.Length;
 
-
+                        editorView.Selection.SelectRange(wordrange);
                         wordrange = new ActiproSoftware.Text.TextRange(firstWordOffset, firstWordOffset + firstWordLength);
+                        Text1.Text = "Mouse Pressed " + wordrange.ToString();
+
                     }
                 }
 
@@ -144,6 +143,6 @@ namespace Lexium
 
         }
 
-       
+
     }
 }
