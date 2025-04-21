@@ -21,8 +21,7 @@
                 HorizontalScrollBarVisibility="Auto"
                 VerticalScrollBarVisibility="Auto"
                 IsCurrentLineHighlightingEnabled="True"
-                PreviewMouseDown="syntaxEditor_PreviewMouseDown"
-                PreviewMouseUp="SyntaxEditor_PreviewMouseUp">
+                >
                 
 
                 <syntaxEditor:EditorDocument x:Name="document" xml:space="preserve">
