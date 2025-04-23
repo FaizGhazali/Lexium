@@ -16,7 +16,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HelperDll\HelperDll.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="CustomLanguage\Lexium.langdef">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CustomLanguage\Lexium2.langdef">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

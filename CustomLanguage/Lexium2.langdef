@@ -6,7 +6,7 @@ Actipro Syntax Language Definition (.langdef)
   http://www.actiprosoftware.com
 
 -->
-<LanguageDefinition LanguageKey="PlaygroundLanguage" LanguageDescription="My Language" xmlns="http://schemas.actiprosoftware.com/langdef/1.0">
+<LanguageDefinition LanguageKey="PlaygroundLanguage2" LanguageDescription="My Language" xmlns="http://schemas.actiprosoftware.com/langdef/1.0">
 	<!-- Classification types -->
 	<LanguageDefinition.ClassificationTypes>
 		<ClassificationType Key="Style1" DefaultStyle="#FF00D4FF" />
@@ -19,14 +19,20 @@ Actipro Syntax Language Definition (.langdef)
 		<DynamicLexer>
 			<!-- Default state -->
 			<State Id="1" Key="Default">
-				<ExplicitPatternGroup TokenId="1" TokenKey="Keyword" ClassificationTypeKey="Style1" LookAheadPattern="{NonWord}|\z" CaseSensitivity="Sensitive">
+				<ExplicitPatternGroup TokenId="1" TokenKey="Style1" ClassificationTypeKey="Style1" LookAheadPattern="{NonWord}|\z" CaseSensitivity="Sensitive">
 					<ExplicitPatterns>
 						<![CDATA[
-						IF THEN FOR WHEN OKEY
+						IF THEN FOR WHEN OKEY BOBO KOPI
 					]]>
 					</ExplicitPatterns>
 				</ExplicitPatternGroup>
-				
+				<ExplicitPatternGroup TokenId="2" TokenKey="Style2" ClassificationTypeKey="Style2" LookAheadPattern="{NonWord}|\z" CaseSensitivity="Sensitive">
+					<ExplicitPatterns>
+						<![CDATA[
+						INT STR m a o c D xz
+					]]>
+					</ExplicitPatterns>
+				</ExplicitPatternGroup>
 			</State>
 		</DynamicLexer>
 	</LanguageDefinition.Lexer>

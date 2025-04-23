@@ -1,15 +1,13 @@
 ﻿using ActiproSoftware.Text;
+using ActiproSoftware.Text.Implementation;
+using ActiproSoftware.Text.Lexing;
+using ActiproSoftware.Text.Lexing.Implementation;
 using ActiproSoftware.Windows.Controls.SyntaxEditor;
-using System.Text;
+using HelperDll;
+using Lexium.MVVM.ViewModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace Lexium
 {
@@ -18,131 +16,113 @@ namespace Lexium
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly List<string> wordDict = new() { "faiz hebat", "comm suss todd" };
-        public ActiproSoftware.Text.TextRange wordrange ;
-        public ActiproSoftware.Text.TextRange wordrange2;
+        public List<string> wordList = new() { "test", "test one two three"};
+        public Dictionary<string, string> wordObj = new();
+        private MainWindowVM _viewModel = new MainWindowVM();
+
         public MainWindow()
         {
             InitializeComponent();
-        }
+            syntaxEditor.Document.Language = new Lexium.WordTagger.EditorSetup();
 
-        private void SyntaxEditor_PreviewMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            var editorView = syntaxEditor.ActiveView;
-            var textSnapshot = editorView.CurrentSnapshot;
-
-            var offset = editorView.Selection.CaretOffset;
-            var wordRange = textSnapshot.GetWordTextRange(offset);
-            var selection = editorView.Selection;
-
-            if (selection.IsZeroLength)
-            {
-                return;
-            }
-            var range1 = wordrange;
-            var range2 = wordRange;
-
-            wordrange2 = range2;
-
-
-           
-            Text2.Text = "Mouse Release"+wordrange2.ToString();
-
-            var combinedRange = ActiproSoftware.Text.TextRange.Union(range1, range2);
-            selection.SelectRange(combinedRange);
-            wordrange = default;
-            wordrange2 = default;
-            
+            DataContext = _viewModel;
         }
 
         private void syntaxEditor_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            //delay invocation until ui updated
-            Dispatcher.BeginInvoke(new Action(() => {
-                var editorView = syntaxEditor.ActiveView;
-                var textSnapshot = editorView.CurrentSnapshot;
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                string clickedWord = PhraseSelector.HandleMouseDown(syntaxEditor, _viewModel.Words);
 
-                var offset = editorView.Selection.CaretOffset;
-                var wordRange = textSnapshot.GetWordTextRange(offset);
-                wordrange = wordRange;
-
-                editorView.Selection.SelectRange(offset, 0);
-                Text1.Text = "Mouse Pressed " + wordrange.ToString();
-
-
-
-                var snapshotRange = new TextSnapshotRange(textSnapshot, wordRange);
-                var clickedWord = snapshotRange.Text;
-                int index = snapshotRange.StartOffset;
-
-
-                var matchedPhrase = wordDict.FirstOrDefault(phrase =>
-            phrase.Split(' ', StringSplitOptions.RemoveEmptyEntries).Contains(clickedWord));
-
-                if (string.IsNullOrEmpty(matchedPhrase))
-                {
-                    Text3.Text = "No matching phrase found.";
-                    return;
-                }
-
-                //var fullText = textSnapshot.Text;
-                var fullText = snapshotRange.Text;
-                var index2 = fullText.IndexOf(matchedPhrase, StringComparison.OrdinalIgnoreCase);
-
-
-
-                if (index <= 0)
-                {
-                    // Get length of first word
-                    var firstWord = matchedPhrase.Split(' ', StringSplitOptions.RemoveEmptyEntries).First();
-                    int firstWordOffset = index;
-                    int firstWordLength = firstWord.Length;
-
-                    // Set your wordrange
-                    wordrange = new ActiproSoftware.Text.TextRange(firstWordOffset, firstWordOffset + firstWordLength);
-
-
-                    Text1.Text = "Mouse Pressed " + wordrange.ToString();
-                }
-                if (index >= 0)
-                {
-                    var firstword = matchedPhrase.Split(' ', StringSplitOptions.RemoveEmptyEntries).First();
-                    if (clickedWord == firstword)
-                    {
-                        if (index >= 0)
-                        {
-                            // Select the full phrase
-                            editorView.Selection.SelectRange(index, matchedPhrase.Length);
-                            Text3.Text = $"Phrase found and selected: \"{matchedPhrase}\"";
-
-                        }
-
-                        int firstWordOffset = index;
-                        int firstWordLength = firstword.Length;
-
-
-                        wordrange = new ActiproSoftware.Text.TextRange(firstWordOffset, firstWordOffset + firstWordLength);
-
-
-                    }
-                    else
-                    {
-
-                        int numberofspace = 1;
-                        int firstWordOffset = index - (firstword.Length + numberofspace);
-                        int firstWordLength = firstword.Length;
-
-                        editorView.Selection.SelectRange(wordrange);
-                        wordrange = new ActiproSoftware.Text.TextRange(firstWordOffset, firstWordOffset + firstWordLength);
-                        Text1.Text = "Mouse Pressed " + wordrange.ToString();
-
-                    }
-                }
-
+                _viewModel.GetDefination(clickedWord);
             }));
-
         }
 
+        private void DefineBtn_Clicked(object sender, RoutedEventArgs e)
+        {
+            string defineText = DefineTextBox.Text;
+            var editorView = syntaxEditor.ActiveView;
+            string selectedText = editorView.SelectedText;
 
+            _viewModel.AddWord(selectedText, defineText);
+        }
+        void AddKeywordAndRefresh(string keyword)
+        {
+            var lexer = syntaxEditor.Document.Language.GetService<ILexer>() as DynamicLexer;
+            if (lexer == null)
+                return;
+
+            var defaultState = lexer.DefaultLexicalState;
+            var keywordGroup = defaultState.LexicalPatternGroups["Keyword"];
+            if (keywordGroup == null)
+                return;
+
+            using (lexer.CreateChangeBatch())
+            {
+                // Avoid duplicates
+                
+            }
+
+            // 👇 Manual reparse workaround: change document text to force SyntaxEditor to re-tokenize
+            var snapshot = syntaxEditor.Document.CurrentSnapshot;
+            var text = snapshot.Text;
+
+            // Add and remove a whitespace at the end to simulate edit
+           
+        }
+
+        private void RefreshLanguage_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                AddKeywordAndRefresh("ooo");
+                // Create a new language instance (which reloads the langdef)
+                var newLanguage = new Lexium.WordTagger.EditorSetup();
+
+                // Set it to the editor's document
+                syntaxEditor.Document.Language = newLanguage;
+
+                var filePath = @"CustomLanguage\Lexium.langdef"; // Adjust to your actual path
+                var serializer = new SyntaxLanguageDefinitionSerializer()
+                {
+                    UseBuiltInClassificiationTypes = true
+                };
+                var language = serializer.LoadFromFile(filePath);
+                syntaxEditor.Document.Language = language;
+
+
+                AddKeywordAndRefresh("kooo");
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to reload language: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void RefreshLanguage_Click2(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Create a new language instance (which reloads the langdef)
+                var newLanguage = new Lexium.WordTagger.EditorSetup();
+
+                // Set it to the editor's document
+                syntaxEditor.Document.Language = newLanguage;
+
+                var filePath = @"CustomLanguage\Lexium2.langdef"; // Adjust to your actual path
+                var serializer = new SyntaxLanguageDefinitionSerializer()
+                {
+                    UseBuiltInClassificiationTypes = true
+                };
+                var language = serializer.LoadFromFile(filePath);
+                syntaxEditor.Document.Language = language;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to reload language: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }

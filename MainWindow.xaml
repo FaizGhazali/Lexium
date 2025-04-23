@@ -20,14 +20,15 @@
                 x:Name="syntaxEditor"
                 HorizontalScrollBarVisibility="Auto"
                 VerticalScrollBarVisibility="Auto"
+                WordWrapMode="Word"
                 IsCurrentLineHighlightingEnabled="True"
+                MouseDoubleClick="syntaxEditor_PreviewMouseDown"
+                
                 >
                 
 
                 <syntaxEditor:EditorDocument x:Name="document" xml:space="preserve">
-                    <syntaxEditor:EditorDocument.Language>
-                        <Tagger:EditorSetup />
-                    </syntaxEditor:EditorDocument.Language>
+                    
                     
                 </syntaxEditor:EditorDocument>
 
@@ -38,21 +39,23 @@
         <!--#region Right Side-->
         <Grid Grid.Column="1">
             <StackPanel>
-                <TextBlock x:Name="Text1" Text="test"/>
-                <TextBlock x:Name="Text2" Text="test"/>
-                <TextBlock x:Name="Text3" Text="test"/>
+                <TextBlock x:Name="Text1" Text=""/>
+                <TextBlock x:Name="Text2" Text=""/>
+                <TextBlock x:Name="Text3" Text=""/>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0"/>
-                    <Button Grid.Column="1" Content="Define"/>
+                    <TextBox x:Name="DefineTextBox"  Grid.Column="0"/>
+                    <Button Click="DefineBtn_Clicked" Grid.Column="1" Content="Define"/>
                     
 
                 </Grid>
-                <TextBlock x:Name="DefinitionTF" Text="Hello World"/>
+                <TextBlock x:Name="DefinitionTF" Text="{Binding DefinationValue}"/>
+                <Button x:Name="fasfas" Content="1" Click="RefreshLanguage_Click"/>
+                <Button x:Name="casfef" Content="2" Click="RefreshLanguage_Click2"/>
             </StackPanel>
         </Grid>
         <!--#endregion-->
