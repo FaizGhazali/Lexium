@@ -7,6 +7,12 @@ using HelperDll;
 using Lexium.MVVM.ViewModel;
 using System.Windows;
 using System.Windows.Input;
+using Lexium.Helper;
+using ActiproSoftware.Windows.Themes;
+using ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting;
+using System.IO;
+using System.Diagnostics;
+
 
 
 namespace Lexium
@@ -24,9 +30,11 @@ namespace Lexium
         {
             InitializeComponent();
             syntaxEditor.Document.Language = new Lexium.WordTagger.EditorSetup();
-
+            
             DataContext = _viewModel;
+            //ThemeManager.CurrentTheme = ThemeNames.Black;
         }
+
 
         private void syntaxEditor_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -43,7 +51,7 @@ namespace Lexium
             string defineText = DefineTextBox.Text;
             var editorView = syntaxEditor.ActiveView;
             string selectedText = editorView.SelectedText;
-
+            Debug.WriteLine(selectedText);
             _viewModel.AddWord(selectedText, defineText);
         }
         void AddKeywordAndRefresh(string keyword)
@@ -75,7 +83,7 @@ namespace Lexium
         {
             try
             {
-                AddKeywordAndRefresh("ooo");
+                //AddKeywordAndRefresh("ooo");
                 // Create a new language instance (which reloads the langdef)
                 var newLanguage = new Lexium.WordTagger.EditorSetup();
 
@@ -89,9 +97,9 @@ namespace Lexium
                 };
                 var language = serializer.LoadFromFile(filePath);
                 syntaxEditor.Document.Language = language;
-
-
-                AddKeywordAndRefresh("kooo");
+                var helper = new LangDefUtils();
+                helper.AddKeywordToLangDef(@"CustomLanguage\Lexium.langdef", "TAK BEREH");
+                //AddKeywordAndRefresh("kooo");
 
 
             }
@@ -110,7 +118,7 @@ namespace Lexium
                 // Set it to the editor's document
                 syntaxEditor.Document.Language = newLanguage;
 
-                var filePath = @"CustomLanguage\Lexium2.langdef"; // Adjust to your actual path
+                var filePath = @"CustomLanguage\CSharp.langdef"; // Adjust to your actual path
                 var serializer = new SyntaxLanguageDefinitionSerializer()
                 {
                     UseBuiltInClassificiationTypes = true

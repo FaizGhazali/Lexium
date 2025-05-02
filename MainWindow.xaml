@@ -8,7 +8,9 @@
         xmlns:Tagger="clr-namespace:Lexium.WordTagger"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    
     <Grid>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -23,7 +25,7 @@
                 WordWrapMode="Word"
                 IsCurrentLineHighlightingEnabled="True"
                 MouseDoubleClick="syntaxEditor_PreviewMouseDown"
-                
+                Foreground="Red"
                 >
                 
 
@@ -39,6 +41,7 @@
         <!--#region Right Side-->
         <Grid Grid.Column="1">
             <StackPanel>
+                
                 <TextBlock x:Name="Text1" Text=""/>
                 <TextBlock x:Name="Text2" Text=""/>
                 <TextBlock x:Name="Text3" Text=""/>

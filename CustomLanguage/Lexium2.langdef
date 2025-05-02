@@ -6,34 +6,52 @@ Actipro Syntax Language Definition (.langdef)
   http://www.actiprosoftware.com
 
 -->
-<LanguageDefinition LanguageKey="PlaygroundLanguage2" LanguageDescription="My Language" xmlns="http://schemas.actiprosoftware.com/langdef/1.0">
-	<!-- Classification types -->
-	<LanguageDefinition.ClassificationTypes>
-		<ClassificationType Key="Style1" DefaultStyle="#FF00D4FF" />
-		<ClassificationType Key="Style2" DefaultStyle="#FF40B800" />
-		<ClassificationType Key="Style3" DefaultStyle="#FFFFEE00" />
-		<ClassificationType Key="Style4" DefaultStyle="#FFFF0022" />
-	</LanguageDefinition.ClassificationTypes>
-	<!-- Lexer -->
-	<LanguageDefinition.Lexer>
-		<DynamicLexer>
-			<!-- Default state -->
-			<State Id="1" Key="Default">
-				<ExplicitPatternGroup TokenId="1" TokenKey="Style1" ClassificationTypeKey="Style1" LookAheadPattern="{NonWord}|\z" CaseSensitivity="Sensitive">
-					<ExplicitPatterns>
-						<![CDATA[
-						IF THEN FOR WHEN OKEY BOBO KOPI
-					]]>
-					</ExplicitPatterns>
-				</ExplicitPatternGroup>
-				<ExplicitPatternGroup TokenId="2" TokenKey="Style2" ClassificationTypeKey="Style2" LookAheadPattern="{NonWord}|\z" CaseSensitivity="Sensitive">
-					<ExplicitPatterns>
-						<![CDATA[
-						INT STR m a o c D xz
-					]]>
-					</ExplicitPatterns>
-				</ExplicitPatternGroup>
-			</State>
-		</DynamicLexer>
-	</LanguageDefinition.Lexer>
+<LanguageDefinition Name="CustomLanguage" xmlns="http://schemas.actiprosoftware.com/langdef/1.0">
+	<!-- Define classification types -->
+	<ClassificationTypes>
+		<ClassificationType Id="Keyword" />
+		<ClassificationType Id="Comment" />
+		<ClassificationType Id="String" />
+		<ClassificationType Id="Number" />
+	</ClassificationTypes>
+
+	<!-- Define lexical states with regex patterns -->
+	<LexicalStates>
+		<LexicalState Id="Default">
+			<!-- Define keywords using regex with word boundaries -->
+			<RegexPatternGroup TokenId="Keyword" Pattern="\b(if|else|while|for|return|function|var|let|const)\b" Options="IgnoreCase" />
+
+			<!-- Single-line comments -->
+			<RegexPatternGroup TokenId="Comment" Pattern="//.*?$" Options="Multiline" />
+
+			<!-- Multi-line comments -->
+			<RegexPatternGroup TokenId="Comment" Pattern="/\*[\s\S]*?\*/" Options="Singleline" />
+
+			<!-- Strings with escaping (both single and double quotes) -->
+			<RegexPatternGroup TokenId="String" Pattern="&quot;(?:[^&quot;\\]|\\.)*&quot;|'(?:[^'\\]|\\.)*'" />
+
+			<!-- Numbers (integer and decimal) -->
+			<RegexPatternGroup TokenId="Number" Pattern="\b\d+(\.\d+)?\b" />
+
+			<!-- Whitespace -->
+			<RegexPatternGroup TokenId="Whitespace" Pattern="\s+" />
+		</LexicalState>
+	</LexicalStates>
+
+	<!-- Link the classification types to token IDs -->
+	<Tokens>
+		<Token Id="Keyword" Classification="Keyword" />
+		<Token Id="Comment" Classification="Comment" />
+		<Token Id="String" Classification="String" />
+		<Token Id="Number" Classification="Number" />
+		<Token Id="Whitespace" />
+	</Tokens>
+
+	<!-- Define highlighting styles for the classification types -->
+	<HighlightingStyles>
+		<HighlightingStyle Classification="Keyword" ForeColor="Blue" />
+		<HighlightingStyle Classification="Comment" ForeColor="Green" />
+		<HighlightingStyle Classification="String" ForeColor="Maroon" />
+		<HighlightingStyle Classification="Number" ForeColor="DarkCyan" />
+	</HighlightingStyles>
 </LanguageDefinition>

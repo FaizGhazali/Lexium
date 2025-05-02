@@ -20,11 +20,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="CustomLanguage\CSharp.langdef">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CustomLanguage\Dark.vssettings">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="CustomLanguage\Lexium.langdef">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="CustomLanguage\Lexium2.langdef">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
