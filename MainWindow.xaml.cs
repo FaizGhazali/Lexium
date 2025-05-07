@@ -30,9 +30,15 @@ namespace Lexium
         {
             InitializeComponent();
             syntaxEditor.Document.Language = new Lexium.WordTagger.EditorSetup();
-            
+
             DataContext = _viewModel;
-            //ThemeManager.CurrentTheme = ThemeNames.Black;
+            var filePath = @"CustomLanguage\Lexium.langdef"; // Adjust to your actual path
+            var serializer = new SyntaxLanguageDefinitionSerializer()
+            {
+                UseBuiltInClassificiationTypes = true
+            };
+            var language = serializer.LoadFromFile(filePath);
+            syntaxEditor.Document.Language = language;
         }
 
 
@@ -53,6 +59,9 @@ namespace Lexium
             string selectedText = editorView.SelectedText;
             Debug.WriteLine(selectedText);
             _viewModel.AddWord(selectedText, defineText);
+
+            var helper = new LangDefUtils();
+            helper.AddKeywordToLangDef(@"CustomLanguage\Lexium.langdef", selectedText);
         }
         void AddKeywordAndRefresh(string keyword)
         {

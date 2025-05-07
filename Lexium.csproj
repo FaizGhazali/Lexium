@@ -9,6 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CustomLanguage\Lexium.langdef" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="CustomLanguage\Lexium.langdef">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ActiproSoftware.Controls.WPF.SyntaxEditor" Version="24.1.5" />
     <PackageReference Include="ActiproSoftware.Controls.WPF.SyntaxEditor.Addons.DotNet" Version="24.1.5" />
     <PackageReference Include="ActiproSoftware.Controls.WPF.SyntaxEditor.Addons.XML" Version="24.1.5" />
@@ -24,9 +34,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="CustomLanguage\Dark.vssettings">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="CustomLanguage\Lexium.langdef">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="CustomLanguage\Lexium2.langdef">

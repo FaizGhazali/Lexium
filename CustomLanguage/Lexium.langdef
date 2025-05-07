@@ -26,6 +26,9 @@ Actipro Syntax Language Definition (.langdef)
 					]]>
 					</ExplicitPatterns>
 				</ExplicitPatternGroup>
+
+				<RegexPatternGroup TokenId="10" TokenKey="MyToken" ClassificationTypeKey="Style1"
+				 Pattern="kamik\s+suka|saya\s+makan" />
 				
 			</State>
 		</DynamicLexer>
