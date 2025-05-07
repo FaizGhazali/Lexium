@@ -25,20 +25,28 @@ namespace Lexium
         public List<string> wordList = new() { "test", "test one two three"};
         public Dictionary<string, string> wordObj = new();
         private MainWindowVM _viewModel = new MainWindowVM();
+        private Lexium.WordTagger.EditorSetup language = new WordTagger.EditorSetup();
 
         public MainWindow()
         {
             InitializeComponent();
-            syntaxEditor.Document.Language = new Lexium.WordTagger.EditorSetup();
+           // syntaxEditor.Document.Language = new Lexium.WordTagger.EditorSetup();
 
             DataContext = _viewModel;
-            var filePath = @"CustomLanguage\Lexium.langdef"; // Adjust to your actual path
-            var serializer = new SyntaxLanguageDefinitionSerializer()
-            {
-                UseBuiltInClassificiationTypes = true
-            };
-            var language = serializer.LoadFromFile(filePath);
+            //var filePath = @"CustomLanguage\Lexium.langdef"; // Adjust to your actual path
+            //var serializer = new SyntaxLanguageDefinitionSerializer()
+            //{
+            //    UseBuiltInClassificiationTypes = true
+            //};
+            //var language = serializer.LoadFromFile(filePath);
+            //syntaxEditor.Document.Language = language;
+
+            
+            language.LoadFromLangdefFile(@"CustomLanguage\Lexium.langdef");
+            
+
             syntaxEditor.Document.Language = language;
+            syntaxEditor.Document = (IEditorDocument)document;
         }
 
 
@@ -94,21 +102,28 @@ namespace Lexium
             {
                 //AddKeywordAndRefresh("ooo");
                 // Create a new language instance (which reloads the langdef)
-                var newLanguage = new Lexium.WordTagger.EditorSetup();
+                //var newLanguage = syntaxEditor.Document.Language;
 
-                // Set it to the editor's document
-                syntaxEditor.Document.Language = newLanguage;
+                //// Set it to the editor's document
+                //syntaxEditor.Document.Language = newLanguage;
 
-                var filePath = @"CustomLanguage\Lexium.langdef"; // Adjust to your actual path
-                var serializer = new SyntaxLanguageDefinitionSerializer()
-                {
-                    UseBuiltInClassificiationTypes = true
-                };
-                var language = serializer.LoadFromFile(filePath);
-                syntaxEditor.Document.Language = language;
-                var helper = new LangDefUtils();
-                helper.AddKeywordToLangDef(@"CustomLanguage\Lexium.langdef", "TAK BEREH");
+                //var filePath = @"CustomLanguage\Lexium.langdef"; // Adjust to your actual path
+                //var serializer = new SyntaxLanguageDefinitionSerializer()
+                //{
+                //    UseBuiltInClassificiationTypes = true
+                //};
+                //var language = serializer.LoadFromFile(filePath);
+                //syntaxEditor.Document.Language = language;
+                //var helper = new LangDefUtils();
+                //helper.AddKeywordToLangDef(@"CustomLanguage\Lexium.langdef", "TAK BEREH");
                 //AddKeywordAndRefresh("kooo");
+
+                
+                language.LoadFromLangdefFile(@"CustomLanguage\Lexium.langdef");
+
+
+                syntaxEditor.Document.Language = language;
+                syntaxEditor.Document = (IEditorDocument)document;
 
 
             }

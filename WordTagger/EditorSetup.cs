@@ -5,6 +5,7 @@ using ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.Implementation
 using Lexium.Feature;
 using Lexium.Feature.SmokeEffect;
 using Lexium.Helper;
+using System.IO;
 
 
 
@@ -14,17 +15,25 @@ namespace Lexium.WordTagger
     {
         public EditorSetup() : base ("CustomDecorator")
         {
-            //SyntaxEditorHelper.InitializeLanguageFromResourceStream(this, "Lexium.langdef");
-            //RegisterService(new AdornmentManagerProvider<SmokeTextAdornmentManager>(typeof(SmokeTextAdornmentManager)));
-
-            string path = @"CustomLanguage\Lexium.langdef";
-
-            InitializationSetup.InitializeLanguageFromResourceStream(this, path);
+            RegisterServices();
+        }
+        private void RegisterServices()
+        {
             RegisterService(new TextViewTaggerProvider<WordHighlight>(typeof(WordHighlight)));
+           
+            RegisterService(new AdornmentManagerProvider<SmokeTextAdornmentManager>(typeof(SmokeTextAdornmentManager)));
 
-            // Register the word highlight tagger
-            //RegisterService(new CodeDocumentTaggerProvider<CustomSquiggleTagger>(typeof(CustomSquiggleTagger)));
-            //RegisterService(new SquiggleTagQuickInfoProvider());
+            RegisterService(new CodeDocumentTaggerProvider<CustomSquiggleTagger>(typeof(CustomSquiggleTagger)));
+            RegisterService(new SquiggleTagQuickInfoProvider());
+        }
+        public void LoadFromLangdefFile(string filePath)
+        {
+            using var stream = File.OpenRead(filePath);
+            var serializer = new SyntaxLanguageDefinitionSerializer
+            {
+                UseBuiltInClassificiationTypes = true
+            };
+            serializer.InitializeFromStream(this, stream);
         }
     }
 }
