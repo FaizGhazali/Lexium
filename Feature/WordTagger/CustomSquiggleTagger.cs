@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using System.Windows.Media;
 using ActiproSoftware.Text;
 using ActiproSoftware.Text.Tagging;
@@ -9,19 +10,35 @@ using ActiproSoftware.Windows.Controls.SyntaxEditor;
 using ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting;
 using ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting.Implementation;
 using ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.Implementation;
+using Microsoft.Extensions.DependencyInjection;
+using Lexium.MVVM.ViewModel;
+using System.Linq;
 
 namespace Lexium.Feature
 {
     public class CustomSquiggleTagger : CollectionTagger<ISquiggleTag>
     {
         private HashSet<string> _userDefinedWords;
+        private MainWindowVM _treeViewVM;
 
         // Constructor that accepts ICodeDocument
         public CustomSquiggleTagger(ICodeDocument document)
             : base("CustomSquiggle", null, document, true)
         {
+
+            if (App.ServiceProvider == null)
+            {
+                throw new InvalidOperationException("ServiceProvider is not initialized.");
+            }
+            else
+            {
+                
+                _treeViewVM = App.ServiceProvider.GetRequiredService<MainWindowVM>();
+                
+
+            }
             // Initialize the user-defined words
-            InitializeUserDefinedWords();
+            //InitializeUserDefinedWords();
 
             // Subscribe to the document's text changed event for real-time updates
             document.TextChanged += OnDocumentTextChanged;
@@ -44,6 +61,72 @@ namespace Lexium.Feature
         }
 
         private void ScanForTags()
+        {
+            using (var batch = CreateBatch())
+            {
+                Clear();
+                var snapshot = Document.CurrentSnapshot;
+                var text = snapshot.GetText(LineTerminator.Newline);
+
+                //dict to handle tag
+                //ny key then tag will be value
+                var userDefinedPhrases = _treeViewVM.WordObj;
+
+                HashSet<int> excludedIndexes = new HashSet<int>();
+                
+
+                foreach (var phrase in userDefinedPhrases)
+                {
+                    var phraseLower = phrase.Key.ToLower();
+                    var phraseMatches = Regex.Matches(text, Regex.Escape(phraseLower), RegexOptions.IgnoreCase);
+                    
+
+                    foreach (Match match in phraseMatches)
+                    {
+                        for (int i = match.Index; i < match.Index + match.Length; i++)
+                        {
+                            excludedIndexes.Add(i); // Mark all indexes of this phrase to be skipped
+                        }
+
+                        var snapshotRange = new TextSnapshotRange(snapshot, TextRange.FromSpan(match.Index, match.Length));
+                        var versionRange = snapshotRange.ToVersionRange(TextRangeTrackingModes.DeleteWhenZeroLength);
+
+                        var tag = new SquiggleTag
+                        {
+                            ClassificationType = ClassificationTypes.Comment,
+                            ContentProvider = new PlainTextContentProvider(phrase.Value)
+                        };
+                        Add(new TagVersionRange<ISquiggleTag>(versionRange, tag));
+                    }
+                }
+
+                // Now handle single words
+                var matches = Regex.Matches(text, @"\b\w+\b", RegexOptions.IgnoreCase);
+
+                foreach (Match match in matches)
+                {
+                    string word = match.Value.ToLower();
+
+                    // Skip if this word is part of a recognized multi-word phrase
+                    if (excludedIndexes.Contains(match.Index))
+                        continue;
+
+                    if (!userDefinedPhrases.Keys.Contains(word))
+                    {
+                        var snapshotRange = new TextSnapshotRange(snapshot, TextRange.FromSpan(match.Index, match.Length));
+                        var versionRange = snapshotRange.ToVersionRange(TextRangeTrackingModes.DeleteWhenZeroLength);
+
+                        var tag = new SquiggleTag
+                        {
+                            ClassificationType = ClassificationTypes.Warning,
+                            ContentProvider = new PlainTextContentProvider($"Unknown word: {word}")
+                        };
+                        Add(new TagVersionRange<ISquiggleTag>(versionRange, tag));
+                    }
+                }
+            }
+        }
+        private void ScanForTags999()
         {
             using (var batch = CreateBatch())
             {
@@ -112,30 +195,7 @@ namespace Lexium.Feature
         }
 
 
-        private void InitializeUserDefinedWords()
-        {
-            // Define your custom words
-            string input = "tak mudah namun tak senang, terserah atas pilihan, terlalu banyak alasannya, duduk terdiam";
-
-            // Split the input string into words and clean punctuation
-            char[] delimiters = new char[] { ' ', ',', '.' };
-            string[] words = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-
-            // Create a HashSet to store unique words
-            _userDefinedWords = new HashSet<string>();
-            foreach (string word in words)
-            {
-                _userDefinedWords.Add(word.ToLower()); // Convert to lowercase to ensure uniqueness
-            }
-
-            // Optional: Debug output to verify unique words
-            Debug.WriteLine("Unique user-defined words:");
-            foreach (string word in _userDefinedWords)
-            {
-                Debug.WriteLine(word);
-            }
-        }
-
+        
         public void AddWordToDictionary(string word)
         {
             _userDefinedWords.Add(word.ToLower());

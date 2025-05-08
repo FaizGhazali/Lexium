@@ -12,6 +12,7 @@ using ActiproSoftware.Windows.Themes;
 using ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting;
 using System.IO;
 using System.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 
 
 
@@ -22,16 +23,19 @@ namespace Lexium
     /// </summary>
     public partial class MainWindow : Window
     {
+        public IServiceProvider _serviceProvider { get; set; }
         public List<string> wordList = new() { "test", "test one two three"};
         public Dictionary<string, string> wordObj = new();
-        private MainWindowVM _viewModel = new MainWindowVM();
+        private MainWindowVM _viewModel ;
         private Lexium.WordTagger.EditorSetup language = new WordTagger.EditorSetup();
 
-        public MainWindow()
+        public MainWindow(IServiceProvider serviceProvider)
         {
             InitializeComponent();
-           // syntaxEditor.Document.Language = new Lexium.WordTagger.EditorSetup();
+            _serviceProvider = serviceProvider;
+            // syntaxEditor.Document.Language = new Lexium.WordTagger.EditorSetup();
 
+            _viewModel = _serviceProvider.GetRequiredService<MainWindowVM>();
             DataContext = _viewModel;
            
             
@@ -63,6 +67,7 @@ namespace Lexium
 
             var helper = new LangDefUtils();
             helper.AddKeywordToLangDef(@"CustomLanguage\Lexium.langdef", selectedText);
+
         }
         
 
