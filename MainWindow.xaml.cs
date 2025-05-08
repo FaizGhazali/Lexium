@@ -33,14 +33,7 @@ namespace Lexium
            // syntaxEditor.Document.Language = new Lexium.WordTagger.EditorSetup();
 
             DataContext = _viewModel;
-            //var filePath = @"CustomLanguage\Lexium.langdef"; // Adjust to your actual path
-            //var serializer = new SyntaxLanguageDefinitionSerializer()
-            //{
-            //    UseBuiltInClassificiationTypes = true
-            //};
-            //var language = serializer.LoadFromFile(filePath);
-            //syntaxEditor.Document.Language = language;
-
+           
             
             language.LoadFromLangdefFile(@"CustomLanguage\Lexium.langdef");
             
@@ -48,30 +41,7 @@ namespace Lexium
             syntaxEditor.Document.Language = language;
             syntaxEditor.Document = (IEditorDocument)document;
         }
-        void AddKeywordAndRefresh(string keyword)
-        {
-            var lexer = syntaxEditor.Document.Language.GetService<ILexer>() as DynamicLexer;
-            if (lexer == null)
-                return;
-
-            var defaultState = lexer.DefaultLexicalState;
-            var keywordGroup = defaultState.LexicalPatternGroups["Keyword"];
-            if (keywordGroup == null)
-                return;
-
-            using (lexer.CreateChangeBatch())
-            {
-                // Avoid duplicates
-
-            }
-
-            // 👇 Manual reparse workaround: change document text to force SyntaxEditor to re-tokenize
-            var snapshot = syntaxEditor.Document.CurrentSnapshot;
-            var text = snapshot.Text;
-
-            // Add and remove a whitespace at the end to simulate edit
-
-        }
+        
 
         private void syntaxEditor_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {

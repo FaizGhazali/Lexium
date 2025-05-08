@@ -94,6 +94,7 @@ namespace Lexium.MVVM.ViewModel
             {
                 Words.Add(key);
             }
+            UpdateList();
         }
         private void UpdateList()
         {
