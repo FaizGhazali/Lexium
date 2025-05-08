@@ -10,12 +10,15 @@ namespace Lexium.Helper
 {
     public class LangDefUtils
     {
-        public void AddKeywordToLangDef(string filePath, string newKeyword)
+        public void AddKeywordToLangDef(string filePath, string newKeyword,string tokenKey)
         {
             string content = File.ReadAllText(filePath);
+
             
-            string pattern99 = @"(<ExplicitPatterns>\s*<!\[CDATA\[)(.*?)(\]\]>\s*</ExplicitPatterns>)";
-            string pattern = @"(<RegexPatternGroup[^>]*TokenKey=""CustomDefination1""[^>]*Pattern="")(.*?)("")";
+
+            
+            string pattern = $@"(<RegexPatternGroup[^>]*TokenKey=""{Regex.Escape(tokenKey)}""[^>]*Pattern="")(.*?)("")";
+            string pattern9999 = @"(<RegexPatternGroup[^>]*TokenKey=""[tokenKeyHere]""[^>]*Pattern="")(.*?)("")";
 
             bool result = HelperFunction.IsMultiWord(newKeyword);
 
@@ -43,30 +46,6 @@ namespace Lexium.Helper
             var match = Regex.Match(content, pattern, RegexOptions.Singleline);
 
         }
-        public void AddKeywordToLangDef9999(string filePath, string newKeyword)
-        {
-            string content = File.ReadAllText(filePath);
-
-            //var pattern = @"(<ExplicitPatterns><!\[CDATA\[\s*)(.*?)(\s*\]\]></ExplicitPatterns>)";
-            //var pattern = @"<ExplicitPatterns><!\[CDATA\[(.*?)\]\]></ExplicitPatterns>";
-            //var pattern = @"<ExplicitPatterns>\s*<!\[CDATA\[(.*?)\]\]>\s*</ExplicitPatterns>";
-            
-            string pattern = @"(<ExplicitPatterns>\s*<!\[CDATA\[)(.*?)(\]\]>\s*</ExplicitPatterns>)"; 
-
-            bool result = HelperFunction.IsMultiWord(newKeyword);
-
-            var match = Regex.Match(content, pattern, RegexOptions.Singleline);
-
-            if (match.Success)
-            {
-                var existingKeywords = match.Groups[2].Value.Trim().Split(new[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                if (!existingKeywords.Contains(newKeyword))
-                {
-                    string updatedKeywords = string.Join(" ", existingKeywords.Concat(new[] { newKeyword }));
-                    content = Regex.Replace(content, pattern, $"$1{updatedKeywords}$3", RegexOptions.Singleline);
-                    File.WriteAllText(filePath, content);
-                }
-            }
-        }
+        
     }
 }

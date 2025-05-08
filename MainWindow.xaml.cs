@@ -62,11 +62,14 @@ namespace Lexium
             string defineText = DefineTextBox.Text;
             var editorView = syntaxEditor.ActiveView;
             string selectedText = editorView.SelectedText;
+
+            string tokenKey = HelperFunction.GetTokenKeyFromPhrase(selectedText);
+
             Debug.WriteLine(selectedText);
             _viewModel.AddWord(selectedText, defineText);
 
             var helper = new LangDefUtils();
-            helper.AddKeywordToLangDef(@"CustomLanguage\Lexium.langdef", selectedText);
+            helper.AddKeywordToLangDef(@"CustomLanguage\Lexium.langdef", selectedText, tokenKey);
 
         }
         

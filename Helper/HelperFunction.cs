@@ -27,5 +27,16 @@ namespace Lexium.Helper
             // Replace every space with \s+
             return Regex.Replace(input, @"\s+", @"\s+");
         }
+
+        public static string GetTokenKeyFromPhrase(string phrase)
+        {
+            if (string.IsNullOrWhiteSpace(phrase))
+                return "phrase0";
+
+            // Split by whitespace, remove empty entries
+            int wordCount = phrase.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;
+
+            return $"phrase{wordCount}";
+        }
     }
 }
