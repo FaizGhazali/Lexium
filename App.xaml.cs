@@ -34,19 +34,7 @@ namespace Lexium
             services.AddSingleton<MainWindow>();
 
 
-            //Register Service
-            //services.AddSingleton<IDataHandlePlants, DataHandlePlants>();
             
-            //services.AddSingleton<IDBLink>(provider =>
-            //{
-            //    string projectName = "MyApp";
-            //    string projectFolder = "MyDbConnectionString2";
-
-            //    return new dbLink.dbLink(projectName, projectFolder);
-            //});
-
-
-            //Register ViewModels
             services.AddSingleton<MainWindowVM>();
            
         }

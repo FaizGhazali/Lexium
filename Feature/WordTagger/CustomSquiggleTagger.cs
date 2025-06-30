@@ -56,8 +56,11 @@ namespace Lexium.Feature
         {
             // Rescan for tags when the document's text changes
             
-
-            ScanForTags();
+            if(Document != null)
+            {
+                ScanForTags();
+            }
+            
         }
 
         private void ScanForTags()
@@ -73,13 +76,13 @@ namespace Lexium.Feature
                 var userDefinedPhrases = _treeViewVM.WordObj;
 
                 HashSet<int> excludedIndexes = new HashSet<int>();
-                
+
 
                 foreach (var phrase in userDefinedPhrases)
                 {
                     var phraseLower = phrase.Key.ToLower();
                     var phraseMatches = Regex.Matches(text, Regex.Escape(phraseLower), RegexOptions.IgnoreCase);
-                    
+
 
                     foreach (Match match in phraseMatches)
                     {
@@ -124,6 +127,8 @@ namespace Lexium.Feature
                         Add(new TagVersionRange<ISquiggleTag>(versionRange, tag));
                     }
                 }
+                
+                
             }
         }
         private void ScanForTags999()
