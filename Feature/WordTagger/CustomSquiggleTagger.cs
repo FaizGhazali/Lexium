@@ -1,18 +1,19 @@
-﻿using System;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Windows.Controls;
-using System.Windows.Media;
-using ActiproSoftware.Text;
+﻿using ActiproSoftware.Text;
 using ActiproSoftware.Text.Tagging;
 using ActiproSoftware.Text.Tagging.Implementation;
 using ActiproSoftware.Windows.Controls.SyntaxEditor;
 using ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting;
 using ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting.Implementation;
 using ActiproSoftware.Windows.Controls.SyntaxEditor.IntelliPrompt.Implementation;
-using Microsoft.Extensions.DependencyInjection;
+using Lexium.Feature.WordTagger;
 using Lexium.MVVM.ViewModel;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Lexium.Feature
 {
@@ -54,7 +55,6 @@ namespace Lexium.Feature
 
         private void OnDocumentTextChanged(object sender, TextSnapshotChangedEventArgs e)
         {
-            // Rescan for tags when the document's text changes
             
             if(Document != null)
             {
@@ -96,7 +96,7 @@ namespace Lexium.Feature
 
                         var tag = new SquiggleTag
                         {
-                            ClassificationType = ClassificationTypes.Comment,
+                            ClassificationType = ClassificationTypesCustom.InvisibleSquiggle,
                             ContentProvider = new PlainTextContentProvider(phrase.Value)
                         };
                         Add(new TagVersionRange<ISquiggleTag>(versionRange, tag));

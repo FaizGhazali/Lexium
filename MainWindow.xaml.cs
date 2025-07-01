@@ -37,8 +37,15 @@ namespace Lexium
 
             _viewModel = _serviceProvider.GetRequiredService<MainWindowVM>();
             DataContext = _viewModel;
-           
-            
+
+            var helper = new LangDefUtils();
+            foreach (var word in _viewModel.WordList)
+            {
+                var key = HelperFunction.GetTokenKeyFromPhrase(word);
+                helper.AddKeywordToLangDef(@"CustomLanguage\Lexium.langdef", word, key);
+            }
+
+
             language.LoadFromLangdefFile(@"CustomLanguage\Lexium.langdef");
             
 

@@ -12,7 +12,7 @@ namespace Lexium.MVVM.ViewModel
     public class MainWindowVM : INotifyPropertyChanged
     {
         private Dictionary<string, string> _wordObj = new Dictionary<string, string>();
-        private ObservableCollection<string> _wordList = new ObservableCollection<string>();
+        
         public List<string> Words { get; set; } = new List<string>();
 
         public Dictionary<string, string> WordObj
@@ -40,6 +40,7 @@ namespace Lexium.MVVM.ViewModel
             
         }
 
+        private ObservableCollection<string> _wordList = new ObservableCollection<string>();
         public ObservableCollection<string> WordList
         {
             get => _wordList;

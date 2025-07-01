@@ -19,9 +19,9 @@ namespace Lexium.WordTagger
         }
         private void RegisterServices()
         {
-            RegisterService(new TextViewTaggerProvider<WordHighlight>(typeof(WordHighlight)));
+            //RegisterService(new TextViewTaggerProvider<WordHighlight>(typeof(WordHighlight)));
 
-            RegisterService(new AdornmentManagerProvider<SmokeTextAdornmentManager>(typeof(SmokeTextAdornmentManager)));
+            //RegisterService(new AdornmentManagerProvider<SmokeTextAdornmentManager>(typeof(SmokeTextAdornmentManager)));
 
             RegisterService(new CodeDocumentTaggerProvider<CustomSquiggleTagger>(typeof(CustomSquiggleTagger)));
             RegisterService(new SquiggleTagQuickInfoProvider());

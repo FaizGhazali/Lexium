@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting;
+using ActiproSoftware.Windows.Controls.SyntaxEditor.Highlighting.Implementation;
+using Lexium.MVVM.ViewModel;
+using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -6,7 +9,9 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using Lexium.MVVM.ViewModel;
+using System.Windows.Media;
+using Lexium.WordTagger;
+using Lexium.Feature.WordTagger;
 
 namespace Lexium
 {
@@ -24,6 +29,22 @@ namespace Lexium
             ServiceProvider = services.BuildServiceProvider();
 
             base.OnStartup(e);
+
+            var style = new HighlightingStyle
+            {
+                Foreground =Colors.Transparent,
+                Background = null
+                
+            };
+
+            AmbientHighlightingStyleRegistry.Instance.Register(
+                ClassificationTypesCustom.InvisibleSquiggle,
+                style
+            );
+
+
+
+
             var mainPage = ServiceProvider.GetRequiredService<MainWindow>();
             mainPage.Show();
 
